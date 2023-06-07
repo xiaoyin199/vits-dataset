@@ -1,6 +1,7 @@
 import stable_whisper as whisper
 import os
 import sys
+import zhconv
 
 '''
 # 语音转文字，根据停顿切分句子
@@ -23,8 +24,9 @@ class WhisperTranscriber:
         data = self.transcribe(audio_path, language=language)
         for item in data:
             if item['text'] != "字幕由 Amara.org 社群提供" and item['text'] != "字幕由Amara.org社群提供":
+                text = zhconv.convert(item['text'], 'zh-cn')
                 res.append({'start': self.sec2vtt(item['start']), 'end': self.sec2vtt(
-                    item['end']), 'text': item['text']})
+                    item['end']), 'text': text})
         return res
 
     def sec2hhmmss(self, seconds: (float, int)):
